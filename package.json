@@ -1,0 +1,36 @@
+{
+  "name": "resizablepanelsreact",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "peerDependencies": {
+    "react": "^16.8.4"
+  },
+  "scripts": {
+    "start": "webpack --watch",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/feliperrf/ResizablePanelsReact.git"
+  },
+  "author": "Felipe Renan Ribas Felipe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/feliperrf/ResizablePanelsReact/issues"
+  },
+  "homepage": "https://github.com/feliperrf/ResizablePanelsReact#readme",
+  "dependencies": {
+    "react": "^16.8.4",
+    "webpack": "^4.29.6"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "webpack-cli": "^3.3.0"
+  }
+}
