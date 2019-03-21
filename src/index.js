@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 
 // Components
 import Resizer from './components/Resizer';
@@ -9,14 +10,27 @@ import Resizer from './components/Resizer';
 // width
 // height
 // panelsSize - size of the panels in order (left to rigth)
-//sizeUnitMeasure - unit used to set the sizes (px, em, % ...)
+// sizeUnitMeasure - unit used to set the sizes (px or %)
 export default class ResizablePanels extends Component {
+  constructor(props) {
+    super(props);
+
+    this.resizable = React.createRef();
+    this.state = this.state;
+  }
   state = {
-    panelsSize: []
+    panelsSize: [],
+    resizing: false
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     this.setState({ ...this.state, panelsSize: this.props.panelsSize });
+
+    ReactDOM.findDOMNode(this).addEventListener('mousemove', this.doResize);
+    ReactDOM.findDOMNode(this).addEventListener(
+      'mouseup',
+      await this.stopResize
+    );
   }
 
   render() {
@@ -33,6 +47,7 @@ export default class ResizablePanels extends Component {
           display: 'flex',
           flexDirection: this.props.displayDirection || 'row'
         }}
+        ref={this.resizable}
       >
         {this.renderFirst()}
         {this.renderRest(rest)}
@@ -45,7 +60,7 @@ export default class ResizablePanels extends Component {
       <div
         className="resizable-fragment"
         key={`fragment_0`}
-        style={this.getStyle(this.props.displayDirection, 0)}
+        style={this.getStyle(0)}
       >
         {this.props.children[0]}
       </div>
@@ -68,7 +83,7 @@ export default class ResizablePanels extends Component {
       <div
         className="resizable-fragment"
         key={`fragment_` + index}
-        style={this.getStyle(this.props.displayDirection, index)}
+        style={this.getStyle(index)}
       >
         {children}
       </div>
@@ -76,27 +91,114 @@ export default class ResizablePanels extends Component {
   }
 
   renderResizer(index) {
-    return <Resizer size="15px" direction={this.props.displayDirection} />;
+    return (
+      <Resizer
+        size="15px"
+        key={`resizer_` + index}
+        direction={this.props.displayDirection}
+        onMouseDown={e => this.startResize(e, index)}
+      />
+    );
   }
 
-  getStyle(orientation, index) {
+  displayDirectionIsColumn() {
+    return this.props.displayDirection === 'column' ? true : false;
+  }
+
+  getStyle(index) {
     const panelsSize = this.state.panelsSize || [];
     const panelsSizeLength = panelsSize.length - 1;
     const size = index > panelsSizeLength ? '100%' : panelsSize[index];
     const unitMeasure = this.props.sizeUnitMeasure || 'px';
 
-    if (orientation === 'column') {
+    if (this.displayDirectionIsColumn()) {
       return {
         height: `${size}${unitMeasure}`,
         width: `100%`,
-        overflow: 'auto'
+        overflow: 'hidden'
       };
     }
 
     return {
       height: `100%`,
       width: `${size}${unitMeasure}`,
-      overflow: 'auto'
+      overflow: 'hidden'
     };
+  }
+
+  startResize(e, index) {
+    e.preventDefault();
+    this.setState({
+      ...this.state,
+      resizing: true,
+      currentPanel: index,
+      initialPos: this.displayDirectionIsColumn() ? e.clientY : e.clientX
+    });
+  }
+
+  doResize = e => {
+    if (this.state.resizing) {
+      const currentMousePosition = this.displayDirectionIsColumn()
+        ? e.clientY
+        : e.clientX;
+
+      const displacement = this.state.initialPos - currentMousePosition;
+
+      const nextPanelsSize = this.getNextPanelsSize(displacement);
+
+      this.setState({
+        ...this.state,
+        initialPos: currentMousePosition,
+        panelsSize: nextPanelsSize,
+        displacement
+      });
+    }
+  };
+
+  stopResize = e => {
+    const displacement = this.state.displacement;
+
+    const nextPanelsSize = this.getNextPanelsSize(displacement);
+
+    this.setState({
+      ...this.state,
+      resizing: false,
+      currentPanel: null,
+      panelsSize: nextPanelsSize,
+      displacement: 0
+    });
+  };
+
+  getCurrentComponentSize() {
+    const componentSizes = this.resizable.current.getBoundingClientRect();
+
+    return this.displayDirectionIsColumn()
+      ? componentSizes.height
+      : componentSizes.width;
+  }
+
+  getNextPanelsSize(displacement) {
+    const currentPanelsSize = this.state.panelsSize;
+    const usePercentage = this.props.sizeUnitMeasure === '%';
+
+    const resizeSize = usePercentage
+      ? this.convertToPercentage(displacement)
+      : displacement;
+
+    const newPanelsSize = currentPanelsSize.map((panelSize, index) => {
+      if (index === this.state.currentPanel) return panelSize + resizeSize;
+      else if (index === this.state.currentPanel - 1)
+        return panelSize - resizeSize;
+
+      return panelSize;
+    });
+
+    return newPanelsSize;
+  }
+
+  convertToPercentage(displacement) {
+    const size = this.getCurrentComponentSize();
+
+    return (displacement * 100) / size;
   }
 }

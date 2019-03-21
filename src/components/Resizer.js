@@ -6,18 +6,18 @@ export default class Resizer extends Component {
       return {
         width: '100%',
         height: this.props.size,
-        background: 'pink'
+        background: 'black'
       };
     }
 
     return {
       width: this.props.size,
       height: '100%',
-      background: 'pink'
+      background: 'black'
     };
   }
 
   render() {
-    return <div style={this.getStyle()} />;
+    return <div onMouseDown={this.props.onMouseDown} style={this.getStyle()} />;
   }
 }
