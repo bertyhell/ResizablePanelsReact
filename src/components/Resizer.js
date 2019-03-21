@@ -6,14 +6,14 @@ export default class Resizer extends Component {
       return {
         width: '100%',
         height: this.props.size,
-        background: 'black'
+        background: this.props.color
       };
     }
 
     return {
       width: this.props.size,
       height: '100%',
-      background: 'black'
+      background: this.props.color
     };
   }
 

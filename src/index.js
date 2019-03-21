@@ -11,6 +11,7 @@ import Resizer from './components/Resizer';
 // height
 // panelsSize - size of the panels in order (left to rigth)
 // sizeUnitMeasure - unit used to set the sizes (px or %)
+// resizerColor - color of resizer
 export default class ResizablePanels extends Component {
   constructor(props) {
     super(props);
@@ -97,6 +98,7 @@ export default class ResizablePanels extends Component {
         key={`resizer_` + index}
         direction={this.props.displayDirection}
         onMouseDown={e => this.startResize(e, index)}
+        color={this.props.resizerColor}
       />
     );
   }
