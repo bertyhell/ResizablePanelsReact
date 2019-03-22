@@ -1,6 +1,6 @@
 {
   "name": "resizable-panels-react",
-  "version": "2.0.4",
+  "version": "2.0.7",
   "description": "A simple react component to build resizable panels :D",
   "main": "build/index.js",
   "peerDependencies": {

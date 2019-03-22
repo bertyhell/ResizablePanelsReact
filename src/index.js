@@ -4,15 +4,6 @@ import ReactDOM from 'react-dom';
 // Components
 import Resizer from './components/Resizer';
 
-//Props:
-// bkcolor - background color
-// displayDirection - flex direction
-// width
-// height
-// panelsSize - size of the panels in order (left to rigth)
-// sizeUnitMeasure - unit used to set the sizes (px or %)
-// resizerColor - color of resizer
-// resizerSize - width or height of resizer
 export default class ResizablePanels extends Component {
   constructor(props) {
     super(props);
