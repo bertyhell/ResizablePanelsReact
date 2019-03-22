@@ -24,6 +24,7 @@ export default class ResizablePanels extends Component {
       this.executeResize
     );
     ReactDOM.findDOMNode(this).addEventListener('mouseup', this.stopResize);
+    ReactDOM.findDOMNode(this).addEventListener('mouseleave', this.stopResize);
   }
 
   render() {
