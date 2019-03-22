@@ -24,14 +24,14 @@ export default class ResizablePanels extends Component {
     resizing: false
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     this.setState({ ...this.state, panelsSize: this.props.panelsSize });
 
-    ReactDOM.findDOMNode(this).addEventListener('mousemove', this.doResize);
     ReactDOM.findDOMNode(this).addEventListener(
-      'mouseup',
-      await this.stopResize
+      'mousemove',
+      this.executeResize
     );
+    ReactDOM.findDOMNode(this).addEventListener('mouseup', this.stopResize);
   }
 
   render() {
@@ -57,15 +57,7 @@ export default class ResizablePanels extends Component {
   }
 
   renderFirst() {
-    return (
-      <div
-        className="resizable-fragment"
-        key={`fragment_0`}
-        style={this.getStyle(0)}
-      >
-        {this.props.children[0]}
-      </div>
-    );
+    return this.renderChildren(this.props.children[0], 0);
   }
 
   renderRest(rest) {
@@ -138,7 +130,7 @@ export default class ResizablePanels extends Component {
     });
   }
 
-  doResize = e => {
+  executeResize = e => {
     if (this.state.resizing) {
       const currentMousePosition = this.displayDirectionIsColumn()
         ? e.clientY
@@ -157,16 +149,11 @@ export default class ResizablePanels extends Component {
     }
   };
 
-  stopResize = e => {
-    const displacement = this.state.displacement;
-
-    const nextPanelsSize = this.getNextPanelsSize(displacement);
-
+  stopResize = () => {
     this.setState({
       ...this.state,
       resizing: false,
       currentPanel: null,
-      panelsSize: nextPanelsSize,
       displacement: 0
     });
   };
