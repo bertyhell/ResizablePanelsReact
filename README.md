@@ -12,5 +12,8 @@ Props:
 - **sizeUnitMeasure**: unit used to calculate the amount to resize (px or %)
 - **resizerColor**: change resizer color
 - **resizerSize**: change resizer size
+- **startResize**: callback function that will be called when the user starts resizing (mousedown)
+- **onResize**: callback function that will be called during resize (mousemove). Number of pixels displacement is passed as the first argument
+- **stopResize**: callback function that will be called when the user stops resizing (mouseup)
 
 Code sample on CodeSandBox: https://codesandbox.io/embed/8l8lpp5nk9?fontsize=14

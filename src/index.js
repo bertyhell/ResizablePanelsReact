@@ -121,6 +121,9 @@ export default class ResizablePanels extends Component {
       currentPanel: index,
       initialPos: this.displayDirectionIsColumn() ? e.clientY : e.clientX
     });
+    if (this.props.startResize) {
+      this.props.startResize();
+    }
   }
 
   executeResize = e => {
@@ -139,6 +142,9 @@ export default class ResizablePanels extends Component {
         panelsSize: nextPanelsSize,
         displacement
       });
+      if (this.props.onResize) {
+        this.props.onResize(displacement);
+      }
     }
   };
 
@@ -149,6 +155,9 @@ export default class ResizablePanels extends Component {
       currentPanel: null,
       displacement: 0
     });
+    if (this.props.stopResize) {
+      this.props.stopResize();
+    }
   };
 
   getCurrentComponentSize() {
