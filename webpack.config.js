@@ -22,7 +22,9 @@ module.exports = {
     ]
   },
   externals: {
-    react: 'commonjs react'
+    react: 'react',
+    commonjs: 'commonjs',
+    'react-dom': 'react-dom'
   },
   resolve: {
     alias: { react: path.resolve(__dirname, '../../node_modules', 'react') }
