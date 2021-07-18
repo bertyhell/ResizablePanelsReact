@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 
 // Components
 import Resizer from './components/Resizer';
@@ -18,13 +17,6 @@ export default class ResizablePanels extends Component {
 
   componentDidMount() {
     this.setState({ ...this.state, panelsSize: this.props.panelsSize });
-
-    ReactDOM.findDOMNode(this).addEventListener(
-      'mousemove',
-      this.executeResize
-    );
-    ReactDOM.findDOMNode(this).addEventListener('mouseup', this.stopResize);
-    ReactDOM.findDOMNode(this).addEventListener('mouseleave', this.stopResize);
   }
 
   render() {
@@ -42,6 +34,9 @@ export default class ResizablePanels extends Component {
           flexDirection: this.props.displayDirection || 'row'
         }}
         ref={this.resizable}
+        onMouseMove={this.executeResize}
+        onMouseUp={this.stopResize}
+        onMouseLeave={this.stopResize}
       >
         {this.renderFirst()}
         {this.renderRest(rest)}
